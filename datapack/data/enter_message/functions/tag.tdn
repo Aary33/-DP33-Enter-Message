@@ -1,0 +1,38 @@
+@on compile
+@priority 0
+
+
+#Dependencies
+
+define function second {
+    global var f_second = resource</>
+    
+    
+    set @a -> enterMsg.age.s += 1
+    as @a[scores={enterMsg.age.s=1}] at @s 
+        set @s -> enterMsg.leave = 1 
+    
+    schedule function / 1s replace
+}
+
+define function tick {
+    @tag tick
+    execute as @a[scores={enterMsg.leave=1..}] at @s run function $f_entered_game
+}
+
+define function init {
+    @tag load
+    
+    
+    scoreboard objectives add enterMsg.leave minecraft.custom:minecraft.leave_game {"text":"Enter Message Trigger"}
+    scoreboard objectives add enterMsg.age.s dummy {"text":"Enter Message Age(s)"}
+    
+    schedule function $f_second 1s replace
+    tellraw @a ["",{"text":"> ","color":"gray"},{"text":"[Enter Message]","color":"aqua"},{"text":"[1.0.0]","color":"dark_gray"},{"text":" module loaded.","color":"gray"}]    
+    
+}
+
+
+define function uninstall {
+    scoreboard objectives remove enterMsg.leave
+}

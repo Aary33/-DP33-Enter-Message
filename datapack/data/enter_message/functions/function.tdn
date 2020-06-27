@@ -1,0 +1,32 @@
+@on compile
+@priority 1
+
+#Config
+var welcome_title = "Welcome!"
+var welcome_subtitle = "Don't catch the virus."
+
+#Dependencies
+
+#Initialize objectives
+define objective enterMsg.leave minecraft.custom:minecraft.leave_game {"text":"Enter Message Trigger"}
+define objective enterMsg.age.s dummy {"text":"Enter Message Age(s)"}
+
+#Functions
+#
+#
+
+define function announce {
+    global var f_announce = resource</>
+    
+    title @s times 0 60 10
+    title @s subtitle ["",{"text":$welcome_subtitle,"color":"aqua"}]
+    title @s title ["",{"text":$welcome_title,"color":"yellow"}]
+}
+
+define function entered_game {
+    global var f_entered_game = resource</>
+    
+    function $f_announce
+    
+    set @s -> enterMsg.leave = 0
+}
